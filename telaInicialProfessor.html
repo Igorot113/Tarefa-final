@@ -13,41 +13,49 @@
 
     <!-- tabela para alunos -->
 
-    <h3>Alunos</h3>
-
-    <table>
-        <tr>
-             <th>Nome</th> <th>Média</th> <th>Frequência</th>
-        </tr>
-        <tr>
-            <td>(aluno 1)</td> <td>(media 1)</td> <td>(frequência 1)</td>
-        </tr>
-        <tr>
-            <td>(aluno 2)</td> <td>(media 2)</td> <td>(frequência 2)</td>
-        </tr>
-        <tr>
-            <td>(aluno 3)</td> <td>(media 3)</td> <td>(frequência 3)</td>
-        </tr>
-        <tr>
-            <td>(aluno 4)</td> <td>(media 4)</td> <td>(frequência 4)</td>
-        </tr>
-       
-
-
-    </table>
+    <span class="tabelaAlunos">
+        <h3>Alunos</h3>
+        <table>
+            <tr>
+                <th>Nome</th> <th>Média</th> <th>Frequência</th>
+            </tr>
+            <tr>
+                <td>(aluno 1)</td> <td>(media 1)</td> <td>(frequência 1)</td>
+            </tr>
+            <tr>
+                <td>(aluno 2)</td> <td>(media 2)</td> <td>(frequência 2)</td>
+            </tr>
+            <tr>
+                <td>(aluno 3)</td> <td>(media 3)</td> <td>(frequência 3)</td>
+            </tr>
+            <tr>
+                <td>(aluno 4)</td> <td>(media 4)</td> <td>(frequência 4)</td>
+            </tr>
+        </table>
+    </span>
+    
 
 
     <!-- lista para tarefas lançadas -->
 
-    <h3>Tarefas Pendentes</h3>
-    <ul>
-        <li>(tarefa 1)</li>
-        <li>(tarefa 2)</li>
-        <li>(tarefa 3)</li>
-        <li>(tarefa 4)</li>
-        <li>(tarefa 5)</li>
-    </ul>
+    <span class="listaTarefas">
+        <h3>Tarefas Pendentes</h3>
+        <ul>
+            <li>(tarefa 1)</li>
+            <li>(tarefa 2)</li>
+            <li>(tarefa 3)</li>
+            <li>(tarefa 4)</li>
+            <li>(tarefa 5)</li>
+        </ul>
+    </span>
 
+    <span class="atribuirTarefa">
+        <h3>Atribuir Tarefa a aluno</h3>
+        <label for="cpf">Digite o cpf do aluno: </label>
+        <input type="text" name="cpf" id="cpfTarefa">
+        <label for="tarefa">Nome da tarefa:</label>
+        <input type="text" name="tarefa" id="tarefa">
+    </span>
     
     <h3>Aulas Atribuidas no Mês de Outubro</h3>
     
@@ -95,7 +103,7 @@
             </table>
     </span>
     <br>
-    <button>Adicionar Aluno</button>
+    <a href="cadastrarAluno.html">Cadastrar aluno</a>
 
 
 
