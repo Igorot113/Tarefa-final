@@ -58,7 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
             alert(`Login de Professor bem-sucedido! Bem-vindo(a), ${professorEncontrado.nome}.`);
             
             // Redireciona para a página do professor (Ex: painel.html)
-            window.location.href = 'painel.html'; 
+            window.location.href = 'telaInicialProfessor.html'; 
 
         } else {
             // 6. Login FALHOU
