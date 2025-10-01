@@ -5,114 +5,55 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tela Inicial - Professor</title>
-    <link rel="stylesheet" href="professor.css">
+    <link rel="stylesheet" href="telaProfessor.css">
 </head>
 
 <body>
     <header>
-        <p>Professor:</p>
-        <p class="NomeProfessor">(nome do professor)</p>
+        <div>
+            <p>Professor:</p>
+            <p class="NomeProfessor">(nome do professor)</p>
+        </div>
+        <div>
+            <button>Adicionar Aluno</button>
+        </div>
     </header>
 
-    <P>Professor: </P> <p class="NomeProfessor">(nome do professor)</p>
-
-
-    <!-- tabela para alunos -->
-
-    <span class="tabelaAlunos">
-        <h3>Alunos</h3>
-        <table>
-            <tr>
-                <th>Nome</th> <th>Média</th> <th>Frequência</th>
-            </tr>
-            <tr>
-                <td>(aluno 1)</td> <td>(media 1)</td> <td>(frequência 1)</td>
-            </tr>
-            <tr>
-                <td>(aluno 2)</td> <td>(media 2)</td> <td>(frequência 2)</td>
-            </tr>
-            <tr>
-                <td>(aluno 3)</td> <td>(media 3)</td> <td>(frequência 3)</td>
-            </tr>
-            <tr>
-                <td>(aluno 4)</td> <td>(media 4)</td> <td>(frequência 4)</td>
-            </tr>
-        </table>
-    </span>
-    
-
-
-    <!-- lista para tarefas lançadas -->
-
-    <span class="listaTarefas">
-        <h3>Tarefas Pendentes</h3>
-        <ul>
-            <li>(tarefa 1)</li>
-            <li>(tarefa 2)</li>
-            <li>(tarefa 3)</li>
-            <li>(tarefa 4)</li>
-            <li>(tarefa 5)</li>
-        </ul>
-    </span>
-
-    <span class="atribuirTarefa">
-        <h3>Atribuir Tarefa a aluno</h3>
-        <label for="cpf">Digite o cpf do aluno: </label>
-        <input type="text" name="cpf" id="cpfTarefa">
-        <label for="tarefa">Nome da tarefa:</label>
-        <input type="text" name="tarefa" id="tarefa">
-    </span>
-    
-    <h3>Aulas Atribuidas no Mês de Outubro</h3>
-    
-    <span class="calendario">
-        <table>
-            <tr>
-                <th >Domingo</th> <th>Segunda</th> 
-                <th>Terça</th> <th>Quarta</th>
-                <th>Quinta</th> <th>Sexta</th> 
-                <th>Sábado</th>
-            </tr>
-        
-            <tr>
-                <td class="NdiaUtil">1</td> <td>2</td> 
-                <td>3</td> <td>4</td> 
-                <td>5</td> <td>6</td> 
-                <td class="NdiaUtil">7</td>
-            </tr>
-
-            <tr>
-                <td class="NdiaUtil">8</td> <td>9</td> 
-                <td>10</td> <td>11</td> 
-                <td>12</td> <td>13</td>
-                <td class="NdiaUtil">14</td>
-             </tr>
-
-            <tr>
-                <td class="NdiaUtil">15</td> <td>16</td> 
-                <td>17</td> <td>18</td> 
-                <td>19</td> <td>20</td> 
-                <td class="NdiaUtil">21</td> 
-            </tr>
-
-            <tr>
-                <td class="NdiaUtil">22</td> <td>23</td> 
-                <td>24</td> <td>25</td> 
-                <td>26</td> <td>27</td> 
-                <td class="NdiaUtil">28</td>
-            </tr>
-
-            <tr>
-                <td class="NdiaUtil">29</td> <td>30</td>
-            </tr>
-        
+    <main>
+        <!-- Tabela de Alunos -->
+        <section class="tabelaAlunos card">
+            <h3>Alunos</h3>
+            <table>
+                <tr>
+                    <th>Nome</th>
+                    <th>Média</th>
+                    <th>Frequência</th>
+                </tr>
+                <tr>
+                    <td>(aluno 1)</td>
+                    <td>(media 1)</td>
+                    <td>(frequência 1)</td>
+                </tr>
+                <tr>
+                    <td>(aluno 2)</td>
+                    <td>(media 2)</td>
+                    <td>(frequência 2)</td>
+                </tr>
+                <tr>
+                    <td>(aluno 3)</td>
+                    <td>(media 3)</td>
+                    <td>(frequência 3)</td>
+                </tr>
+                <tr>
+                    <td>(aluno 4)</td>
+                    <td>(media 4)</td>
+                    <td>(frequência 4)</td>
+                </tr>
             </table>
-    </span>
-    <br>
-    <a href="cadastrarAluno.html">Cadastrar aluno</a>
+        </section>
 
-        <!-- Tarefas -->
-        <section class="tarefas">
+        <!-- Tarefas Pendentes -->
+        <section class="listaTarefas card">
             <h3>Tarefas Pendentes</h3>
             <ul>
                 <li>(tarefa 1)</li>
@@ -123,10 +64,21 @@
             </ul>
         </section>
 
-        <!-- Aulas -->
-        <section class="calendario">
+        <!-- Atribuir Tarefa -->
+        <section class="atribuirTarefa card">
+            <h3>Atribuir Tarefa a Aluno</h3>
+            <label for="cpfTarefa">Digite o CPF do aluno:</label>
+            <input type="text" name="cpf" id="cpfTarefa" placeholder="CPF do aluno">
+
+            <label for="tarefa">Nome da Tarefa:</label>
+            <input type="text" name="tarefa" id="tarefa" placeholder="Nome da tarefa">
+
+            <button>Atribuir</button>
+        </section>
+
+        <!-- Calendário -->
+        <section class="calendario card">
             <h3>Aulas Atribuídas no Mês de Outubro</h3>
-            <h3>Aulas de Outubro</h3>
             <table>
                 <tr>
                     <th class="weekend">Dom</th>
@@ -183,13 +135,6 @@
                     <td class="weekend"></td>
                 </tr>
             </table>
-        </section>
-
-        <!-- Botão e situação -->
-        <section class="curso">
-            <button>Adicionar Aluno</button>
-            <p>Situação do curso:</p>
-            <p class="situacaoCurso">(em processo/encerrado)</p>
         </section>
     </main>
 </body>
