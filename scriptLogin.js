@@ -27,8 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (tipoUsuarioSelecionado === 'professor') {
             logarProfessor(login, senha);
         } else if (tipoUsuarioSelecionado === 'aluno') {
-            // Em um projeto real, aqui chamaria a função logarAluno(login, senha);
-            alert("Login de Aluno ainda não implementado. Tente logar como Professor.");
+            logarAluno(login,senha);
         }
     });
 
@@ -59,6 +58,39 @@ document.addEventListener('DOMContentLoaded', () => {
             
             // Redireciona para a página do professor (Ex: painel.html)
             window.location.href = 'telaInicialProfessor.html'; 
+
+        } else {
+            // 6. Login FALHOU
+            alert("Login ou Senha de Professor inválidos.");
+        }
+    }
+
+    function logarAluno(login, senha) {
+        // A chave 'professores' é onde salvamos os dados no cadastro
+        const alunosJSON = localStorage.getItem('alunos');
+        let alunos = professoresJSON ? JSON.parse(alunosJSON) : [];
+
+        // 4. Busca o professor que corresponde ao login (CPF) e Senha
+        const alunosEncontrado = alunos.find(aluno => 
+            aluno.login === login && aluno.senha === senha
+        );
+
+        if (alunosEncontrado) {
+            // 5. LOGIN BEM-SUCEDIDO! Salva o estado de logado
+            const dadosSessao = {
+                login: alunosEncontrado.login,
+                nome: alunosEncontrado.nome,
+                tipo: 'alunos',
+                // NUNCA SALVE A SENHA AQUI, APENAS INFORMAÇÕES BÁSICAS DA SESSÃO
+            };
+            
+            // Salva no localStorage que o professor está logado
+            localStorage.setItem('usuarioLogado', JSON.stringify(dadosSessao));
+
+            alert(`Login de Aluno bem-sucedido! Bem-vindo(a), ${alunosEncontrado.nome}.`);
+            
+            // Redireciona para a página do professor (Ex: painel.html)
+            window.location.href = 'telaInicialAluno.html'; 
 
         } else {
             // 6. Login FALHOU
