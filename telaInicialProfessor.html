@@ -1,107 +1,133 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tela Inicial</title>
-    <link rel="stylesheet" href="telainicialProfessor.css">
+    <title>Tela Inicial - Professor</title>
+    <link rel="stylesheet" href="professor.css">
 </head>
+
 <body>
+    <header>
+        <p>Professor:</p>
+        <p class="NomeProfessor">(nome do professor)</p>
+    </header>
 
-    <P>Professor: </P> <p class="NomeProfessor">(nome do professor)</p>
-
-
-    <!-- tabela para alunos -->
-
-    <h3>Alunos</h3>
-
-    <table>
-        <tr>
-             <th>Nome</th> <th>Média</th> <th>Frequência</th>
-        </tr>
-        <tr>
-            <td>(aluno 1)</td> <td>(media 1)</td> <td>(frequência 1)</td>
-        </tr>
-        <tr>
-            <td>(aluno 2)</td> <td>(media 2)</td> <td>(frequência 2)</td>
-        </tr>
-        <tr>
-            <td>(aluno 3)</td> <td>(media 3)</td> <td>(frequência 3)</td>
-        </tr>
-        <tr>
-            <td>(aluno 4)</td> <td>(media 4)</td> <td>(frequência 4)</td>
-        </tr>
-       
-
-
-    </table>
-
-
-    <!-- lista para tarefas lançadas -->
-
-    <h3>Tarefas Pendentes</h3>
-    <ul>
-        <li>(tarefa 1)</li>
-        <li>(tarefa 2)</li>
-        <li>(tarefa 3)</li>
-        <li>(tarefa 4)</li>
-        <li>(tarefa 5)</li>
-    </ul>
-
-    
-    <h3>Aulas Atribuidas no Mês de Outubro</h3>
-    
-    <span class="calendario">
-        <table>
-            <tr>
-                <th >Domingo</th> <th>Segunda</th> 
-                <th>Terça</th> <th>Quarta</th>
-                <th>Quinta</th> <th>Sexta</th> 
-                <th>Sábado</th>
-            </tr>
-        
-            <tr>
-                <td class="NdiaUtil">1</td> <td>2</td> 
-                <td>3</td> <td>4</td> 
-                <td>5</td> <td>6</td> 
-                <td class="NdiaUtil">7</td>
-            </tr>
-
-            <tr>
-                <td class="NdiaUtil">8</td> <td>9</td> 
-                <td>10</td> <td>11</td> 
-                <td>12</td> <td>13</td>
-                <td class="NdiaUtil">14</td>
-             </tr>
-
-            <tr>
-                <td class="NdiaUtil">15</td> <td>16</td> 
-                <td>17</td> <td>18</td> 
-                <td>19</td> <td>20</td> 
-                <td class="NdiaUtil">21</td> 
-            </tr>
-
-            <tr>
-                <td class="NdiaUtil">22</td> <td>23</td> 
-                <td>24</td> <td>25</td> 
-                <td>26</td> <td>27</td> 
-                <td class="NdiaUtil">28</td>
-            </tr>
-
-            <tr>
-                <td class="NdiaUtil">29</td> <td>30</td>
-            </tr>
-        
+    <main>
+        <!-- Lista de alunos -->
+        <section class="alunos">
+            <h3>Alunos</h3>
+            <table>
+                <tr>
+                    <th>Nome</th>
+                    <th>Média</th>
+                    <th>Frequência</th>
+                </tr>
+                <tr>
+                    <td>(aluno 1)</td>
+                    <td>(média 1)</td>
+                    <td>(frequência 1)</td>
+                </tr>
+                <tr>
+                    <td>(aluno 2)</td>
+                    <td>(média 2)</td>
+                    <td>(frequência 2)</td>
+                </tr>
+                <tr>
+                    <td>(aluno 3)</td>
+                    <td>(média 3)</td>
+                    <td>(frequência 3)</td>
+                </tr>
+                <tr>
+                    <td>(aluno 4)</td>
+                    <td>(média 4)</td>
+                    <td>(frequência 4)</td>
+                </tr>
             </table>
-    </span>
-    <br>
-    <button>Adicionar Aluno</button>
+        </section>
 
+        <!-- Tarefas -->
+        <section class="tarefas">
+            <h3>Tarefas Pendentes</h3>
+            <ul>
+                <li>(tarefa 1)</li>
+                <li>(tarefa 2)</li>
+                <li>(tarefa 3)</li>
+                <li>(tarefa 4)</li>
+                <li>(tarefa 5)</li>
+            </ul>
+        </section>
 
+        <!-- Aulas -->
+        <section class="calendario">
+            <h3>Aulas Atribuídas no Mês de Outubro</h3>
+            <h3>Aulas de Outubro</h3>
+            <table>
+                <tr>
+                    <th class="weekend">Dom</th>
+                    <th>Seg</th>
+                    <th>Ter</th>
+                    <th>Qua</th>
+                    <th>Qui</th>
+                    <th>Sex</th>
+                    <th class="weekend">Sáb</th>
+                </tr>
+                <tr>
+                    <td class="weekend"></td>
+                    <td>1</td>
+                    <td>2</td>
+                    <td>3</td>
+                    <td>4</td>
+                    <td>5</td>
+                    <td class="weekend">6</td>
+                </tr>
+                <tr>
+                    <td class="weekend">7</td>
+                    <td>8</td>
+                    <td>9</td>
+                    <td>10</td>
+                    <td>11</td>
+                    <td>12</td>
+                    <td class="weekend">13</td>
+                </tr>
+                <tr>
+                    <td class="weekend">14</td>
+                    <td>15</td>
+                    <td>16</td>
+                    <td>17</td>
+                    <td>18</td>
+                    <td>19</td>
+                    <td class="weekend">20</td>
+                </tr>
+                <tr>
+                    <td class="weekend">21</td>
+                    <td>22</td>
+                    <td>23</td>
+                    <td>24</td>
+                    <td>25</td>
+                    <td>26</td>
+                    <td class="weekend">27</td>
+                </tr>
+                <tr>
+                    <td class="weekend">28</td>
+                    <td>29</td>
+                    <td>30</td>
+                    <td>31</td>
+                    <td></td>
+                    <td></td>
+                    <td class="weekend"></td>
+                </tr>
+            </table>
+        </section>
 
-
-    <P>Situação do curso: </P> <p class="situacaoCurso">(em processo/encerrado)</p>
-    
-    
+        <!-- Botão e situação -->
+        <section class="curso">
+            <button>Adicionar Aluno</button>
+            <p>Situação do curso:</p>
+            <p class="situacaoCurso">(em processo/encerrado)</p>
+        </section>
+    </main>
 </body>
+
 </html>

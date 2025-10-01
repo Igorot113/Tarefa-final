@@ -1,0 +1,88 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+
+body {
+    background: linear-gradient(135deg, #43cea2, #185a9d);
+    color: #333;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+
+header {
+    text-align: center;
+    margin-bottom: 25px;
+    color: white;
+    font-size: 18px;
+}
+
+.centro {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0px 5px 15px rgba(0,0,0,0.2);
+    max-width: 900px;
+    margin: auto;
+}
+
+
+h3 {
+    margin: 15px 0;
+    color: #185a9d;
+    border-bottom: 2px solid #43cea2;
+    padding-bottom: 5px;
+}
+
+
+.tarefas ul {
+    list-style: none;
+    padding: 0;
+}
+
+.tarefas li {
+    background: #f0f8ff;
+    margin: 5px 0;
+    padding: 10px;
+    border-radius: 6px;
+    transition: 0.3s;
+}
+
+.tarefas li:hover {
+    background: #cce7ff;
+}
+
+
+.calendario table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.calendario th, .calendario td {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: center;
+}
+
+.calendario th {
+    background: #185a9d;
+    color: white;
+}
+
+.MdiaUtil {
+    background: #e6f7ff;
+}
+
+
+.situacaoAluno {
+    margin-top: 20px;
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0px 3px 10px rgba(0,0,0,0.1);
+}
