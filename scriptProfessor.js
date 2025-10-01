@@ -1,22 +1,45 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. Pega o formulário pelo ID
-    const formCadastro = document.getElementById('formCadastro');
+    /**
+     * Verifica se a string contém APENAS letras (incluindo acentos) e espaços.
+     * @param {string} str - A string a ser verificada.
+     * @returns {boolean} - Retorna true se for válida, false caso contrário.
+     */
+    function validarNome(str) {
+        // Regex que permite A-Z, a-z, caracteres acentuados comuns em português e espaços (\s)
+        const regexNome = /^[A-Za-záàâãéèêíìîóòôõúùûüçÇ\s]+$/;
+        return regexNome.test(str);
+    }
 
-    // Verifica se o formulário foi encontrado
+    const formCadastro = document.getElementById('formCadastro');
+    const inputNome = document.getElementById('inputNome'); 
+
     if (!formCadastro) {
         console.error("Erro: O formulário de cadastro não foi encontrado!");
         return;
     }
 
-    // 2. Adiciona um 'ouvinte' de evento para quando o formulário for submetido
+    // Opcional (UX): Bloquear digitação de números no campo Nome em tempo real
+    inputNome.addEventListener('keypress', (e) => {
+        const charCode = (e.which) ? e.which : e.keyCode;
+
+        if (charCode >= 48 && charCode <= 57) {
+            e.preventDefault();
+        }
+    });
+
     formCadastro.addEventListener('submit', (evento) => {
-        // Impede o envio padrão do formulário (que recarregaria a página)
         evento.preventDefault(); 
         
-        // 3. Pega os valores dos campos
-        const nome = document.getElementById('inputNome').value.trim();
+        const nome = inputNome.value.trim();
         const cpf = document.getElementById('inputCpf').value.trim();
         const senha = document.getElementById('inputSenha').value;
+
+        // VALIDAÇÃO: Nome só pode ter letras
+        if (!validarNome(nome)) {
+            alert('O campo Nome só pode conter letras e espaços. Números e caracteres especiais não são permitidos.');
+            inputNome.focus();
+            return;
+        }
 
         // Validação básica
         if (nome === "" || cpf === "" || senha === "") {
@@ -24,22 +47,13 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // 4. Cria o objeto do novo professor
-        // *************************************************************
-        // ATENÇÃO: NUNCA SALVE SENHAS DIRETAMENTE! 
-        // Em um projeto real, você criptografaria (hash) a senha antes de salvar. 
-        // Para fins de estudo, vamos salvar o objeto.
-        // *************************************************************
         const novoProfessor = {
-            login: cpf, // O CPF será o login (chave única)
+            login: cpf,
             nome: nome,
             senha: senha,
             tipo: 'professor'
         };
 
-        // 5. Gerencia o 'Banco de Dados' no localStorage
-        
-        // Recupera a lista de professores (ou um array vazio se não existir)
         const professoresJSON = localStorage.getItem('professores');
         let professores = professoresJSON ? JSON.parse(professoresJSON) : [];
 
@@ -50,16 +64,12 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // Adiciona o novo professor à lista
         professores.push(novoProfessor);
-
-        // Salva a lista atualizada no localStorage (convertida para JSON string)
         localStorage.setItem('professores', JSON.stringify(professores));
 
         alert(`Cadastro de ${nome} (Professor) realizado com sucesso!`);
         
-        // Opcional: Limpa o formulário e redireciona
         formCadastro.reset();
-        window.location.href = 'index.html'; // Redireciona para a página de login
+        window.location.href = 'index.html';
     });
 });
