@@ -7,19 +7,27 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <span>
+    <form id="formLogin">
         <h2>Login</h2>
         <br>
 
+<<<<<<< HEAD
         <!-- requisito 1 e 2 (login com nome cpf e senha do professor e do aluno) -->
         <input type="checkbox" name="tipo" id="tipoAluno" value="aluno">    
         <label for="aluno">Aluno</label>
         <input type="checkbox" name="tipo" id="tipoProfessor" value="professor">    
+=======
+        <input type="radio" name="tipoUsuario" id="aluno" value="aluno" checked>
+        <label for="aluno">Aluno</label>
+        <input type="radio" name="tipoUsuario" id="professor" value="professor">
+>>>>>>> 1e765d388f400354e28f15a03cf6ab523e7a24e9
         <label for="professor">Professor</label>
         <br>
-        <label for="nome">Nome: </label>
-        <input type="text" name="nome" id="nome">
+        
+        <label for="inputLogin">Login (CPF/Matrícula): </label>
+        <input type="text" name="login" id="inputLogin" required>
         <br>
+<<<<<<< HEAD
         <label for="cpf">CPF: </label>
         <input type="text" name="cpf" id="cpf" required>
         <br>
@@ -27,9 +35,18 @@
         <input type="text" name="senha" id="senha" required>
         <br>
         <button type="submit" id="btnLogin">Logar</button>
+=======
+        <label for="inputSenha">Senha: </label>
+        <input type="password" name="senha" id="inputSenha" required> 
+>>>>>>> 1e765d388f400354e28f15a03cf6ab523e7a24e9
         <br>
+        
+        <button type="submit" id="btnLogar">Logar</button>
+        
+        <br><br>
         <a href="cadastro.html">Criar conta como professor</a>
-    </span>
-    <script src="script.js"></script>
+        </form>
+    
+    <script src="scriptLogin.js"></script> 
 </body>
 </html>
