@@ -3,33 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastro</title>
+    <title>Cadastro Professor</title>
     <link rel="stylesheet" href="style.css">
 
 </head>
 <body>
 
-    <span>
+    <form id="formCadastro">
         <h2>Cadastrar Conta Como Professor</h2>
         <br>
-
         <!-- requisito 2 (cadastro com nome cpf e senha apenas do professor) -->
-        <label for="nome">Nome: </label>
-        <input type="text" name="nome" id="nome">
+        <label for="inputNome">Nome: </label>
+        <input type="text" name="nome" id="inputNome" required>
         <br>
-        <label for="cpf">CPF: </label>
-        <input type="text" name="cpf" id="cpf">
+        <label for="inputCpf">CPF: </label>
+        <input type="text" name="cpf" id="inputCpf" required>
         <br>
-        <label for="senha">Senha: </label>
-        <input type="password" name="senha" id="senha" required>
+        <label for="inputSenha">Senha: </label>
+        <input type="password" name="senha" id="inputSenha" required>
         <br>
-        <button>Logar</button>
+        
+        <button type="submit">Cadastrar</button>
         <br>
         <a href="index.html">Fazer login</a>
-    </span>
+    </form>
 
-    
-
-
+    <script src="scriptProfessor.js"></script>
 </body>
 </html>
