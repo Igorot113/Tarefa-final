@@ -27,74 +27,60 @@ document.addEventListener('DOMContentLoaded', () => {
         if (tipoUsuarioSelecionado === 'professor') {
             logarProfessor(login, senha);
         } else if (tipoUsuarioSelecionado === 'aluno') {
-            logarAluno(login,senha);
+            logarAluno(login, senha); // <--- Chamada para a nova função
         }
     });
 
     // Função específica para logar Professor
     function logarProfessor(login, senha) {
-        // A chave 'professores' é onde salvamos os dados no cadastro
         const professoresJSON = localStorage.getItem('professores');
         let professores = professoresJSON ? JSON.parse(professoresJSON) : [];
 
-        // 4. Busca o professor que corresponde ao login (CPF) e Senha
         const professorEncontrado = professores.find(prof => 
             prof.login === login && prof.senha === senha
         );
 
         if (professorEncontrado) {
-            // 5. LOGIN BEM-SUCEDIDO! Salva o estado de logado
             const dadosSessao = {
                 login: professorEncontrado.login,
                 nome: professorEncontrado.nome,
                 tipo: 'professor',
-                // NUNCA SALVE A SENHA AQUI, APENAS INFORMAÇÕES BÁSICAS DA SESSÃO
             };
             
-            // Salva no localStorage que o professor está logado
             localStorage.setItem('usuarioLogado', JSON.stringify(dadosSessao));
-
             alert(`Login de Professor bem-sucedido! Bem-vindo(a), ${professorEncontrado.nome}.`);
-            
-            // Redireciona para a página do professor (Ex: painel.html)
             window.location.href = 'telaInicialProfessor.html'; 
 
         } else {
-            // 6. Login FALHOU
             alert("Login ou Senha de Professor inválidos.");
         }
     }
 
+    // Função específica para logar Aluno (NOVA)
     function logarAluno(login, senha) {
-        // A chave 'professores' é onde salvamos os dados no cadastro
-        const alunosJSON = localStorage.getItem('alunos');
-        let alunos = professoresJSON ? JSON.parse(alunosJSON) : [];
+        // A chave 'alunosCadastrados' é onde salvamos os dados
+        const alunosJSON = localStorage.getItem('alunosCadastrados');
+        let alunos = alunosJSON ? JSON.parse(alunosJSON) : [];
 
-        // 4. Busca o professor que corresponde ao login (CPF) e Senha
-        const alunosEncontrado = alunos.find(aluno => 
-            aluno.login === login && aluno.senha === senha
+        // Busca o aluno que corresponde ao login (CPF) e Senha
+        const alunoEncontrado = alunos.find(aluno =>
+            // O login do aluno é o CPF que ele usou no cadastro
+            aluno.cpf === login && aluno.senha === senha 
         );
 
-        if (alunosEncontrado) {
-            // 5. LOGIN BEM-SUCEDIDO! Salva o estado de logado
+        if (alunoEncontrado) {
             const dadosSessao = {
-                login: alunosEncontrado.login,
-                nome: alunosEncontrado.nome,
-                tipo: 'alunos',
-                // NUNCA SALVE A SENHA AQUI, APENAS INFORMAÇÕES BÁSICAS DA SESSÃO
+                login: alunoEncontrado.cpf,
+                nome: alunoEncontrado.nome,
+                tipo: 'aluno',
             };
-            
-            // Salva no localStorage que o professor está logado
-            localStorage.setItem('usuarioLogado', JSON.stringify(dadosSessao));
 
-            alert(`Login de Aluno bem-sucedido! Bem-vindo(a), ${alunosEncontrado.nome}.`);
-            
-            // Redireciona para a página do professor (Ex: painel.html)
-            window.location.href = 'telaInicialAluno.html'; 
+            localStorage.setItem('usuarioLogado', JSON.stringify(dadosSessao));
+            alert(`Login de Aluno bem-sucedido! Bem-vindo(a), ${alunoEncontrado.nome}.`);
+            window.location.href = 'telaInicialAluno.html'; // Redireciona para a página do aluno
 
         } else {
-            // 6. Login FALHOU
-            alert("Login ou Senha de Professor inválidos.");
+            alert("Login (CPF) ou Senha de Aluno inválidos.");
         }
     }
 });
