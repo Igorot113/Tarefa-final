@@ -62,3 +62,10 @@ th, td {
 .situacaoAluno, .frequenciaAluno, .mediaAluno {
     font-weight: bold;
 }
+
+#btnLogoutAluno{
+    border-radius: 20px;
+    padding: 25px;
+    background-color: #ff7f50;
+    border: none;
+}

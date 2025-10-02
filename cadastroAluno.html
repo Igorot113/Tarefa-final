@@ -1,23 +1,39 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <title>Cadastro Aluno</title>
-</head>
+
+    <head>
+        <meta charset="UTF-8">
+        <title>Cadastro Aluno</title>
+        <link rel="stylesheet" href="telaCadastroAluno.css">
+    </head>
+
 <body>
-    <form id="formCadastroAluno">
-        <h2>Primeiro Acesso / Definir Senha</h2> <label for="inputNomeAluno">Nome:</label>
-        <input type="text" id="inputNomeAluno" required>
+    <div class="container">
+        <form id="formCadastroAluno" class="card">
+            <h2>Primeiro Acesso / Definir Senha</h2>
 
-        <label for="inputCpfAluno">CPF (Será o Login):</label>
-        <input type="text" id="inputCpfAluno" required>
+            <label for="inputNomeAluno">Nome:</label>
+            <input type="text" id="inputNomeAluno" placeholder="Digite seu nome" required>
 
-        <label for="inputSenhaAluno">Defina Sua Senha:</label>
-        <input type="password" id="inputSenhaAluno" required>
+            <label for="inputCpfAluno">CPF (será o login):</label>
+            <input type="text" id="inputCpfAluno" placeholder="Digite seu CPF" required>
 
-        <button type="submit" id="btnDefinirSenha">Definir Senha</button>
-        <a href="login.html">Voltar para o Login</a> </form>
-    
-    <script src="scriptTelaCadastroAluno.js"></script> 
+            <label for="inputSenhaAluno">Defina sua senha:</label>
+            <input type="password" id="inputSenhaAluno" placeholder="Digite sua senha" required>
+
+            <button type="submit" id="btnDefinirSenha">Definir Senha</button>
+
+            <p class="linkVoltar">
+                <a href="login.html">Voltar para o Login</a>
+            </p>
+        </form>
+    </div>
+
+    <script src="scriptTelaCadastroAluno.js"></script>
 </body>
+
 </html>
