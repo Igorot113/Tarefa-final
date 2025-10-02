@@ -12,97 +12,35 @@
 <body>
     <header>
         <p>Aluno:</p>
-        <p class="NomeAluno">(nome do aluno)</p>
+        <p class="NomeAluno" id="alunoNomeDisplay">(nome do aluno)</p> 
+        <button id="btnLogoutAluno">Sair</button>
     </header>
 
     <main class="centro">
-        <!-- Lista de tarefas pendentes -->
         <section class="tarefas">
             <h3>Tarefas Pendentes</h3>
-            <ul>
-                <li>(tarefa 1)</li>
-                <li>(tarefa 2)</li>
-                <li>(tarefa 3)</li>
-                <li>(tarefa 4)</li>
-                <li>(tarefa 5)</li>
-            </ul>
+            <ul id="listaTarefasAlunoUL"> 
+                </ul>
+        </section>
+        
+        <section class="aulasDiaSemana">
+            <h3>Aulas Atribuídas</h3>
+            <ul id="listaAulasAlunoUL">
+                </ul>
         </section>
 
-        <!-- Tabela de aulas atribuídas -->
-        <section class="calendario">
-            <h3>Aulas Atribuídas no Mês de Outubro</h3>
-            <h3>Aulas de Outubro</h3>
-            <table>
-                <tr>
-                    <th class="weekend">Dom</th>
-                    <th>Seg</th>
-                    <th>Ter</th>
-                    <th>Qua</th>
-                    <th>Qui</th>
-                    <th>Sex</th>
-                    <th class="weekend">Sáb</th>
-                </tr>
-                <tr>
-                    <td class="weekend"></td>
-                    <td>1</td>
-                    <td>2</td>
-                    <td>3</td>
-                    <td>4</td>
-                    <td>5</td>
-                    <td class="weekend">6</td>
-                </tr>
-                <tr>
-                    <td class="weekend">7</td>
-                    <td>8</td>
-                    <td>9</td>
-                    <td>10</td>
-                    <td>11</td>
-                    <td>12</td>
-                    <td class="weekend">13</td>
-                </tr>
-                <tr>
-                    <td class="weekend">14</td>
-                    <td>15</td>
-                    <td>16</td>
-                    <td>17</td>
-                    <td>18</td>
-                    <td>19</td>
-                    <td class="weekend">20</td>
-                </tr>
-                <tr>
-                    <td class="weekend">21</td>
-                    <td>22</td>
-                    <td>23</td>
-                    <td>24</td>
-                    <td>25</td>
-                    <td>26</td>
-                    <td class="weekend">27</td>
-                </tr>
-                <tr>
-                    <td class="weekend">28</td>
-                    <td>29</td>
-                    <td>30</td>
-                    <td>31</td>
-                    <td></td>
-                    <td></td>
-                    <td class="weekend"></td>
-                </tr>
-            </table>
-            <p class="DescricaoAula">(Descrição do que acontece no dia selecionado)</p>
-        </section>
+        <section class="situacaoAluno card"> 
+            <h3>Situação do Curso</h3>
+    
+            <div class="statusItem">
+                <p class="rotulo">Situação de Aprovação:</p>
+                <p class="valor situacaoAluno" id="statusAprovacaoDisplay">Carregando...</p> 
+            </div>
 
-        <!-- Situação do aluno -->
-        <section class="situacaoAluno">
-            <p>Situação do aluno no curso:</p>
-            <p class="situacaoAluno">(aprovado/em processo)</p>
-
-            <p>Frequência do aluno no curso:</p>
-            <p class="frequenciaAluno">(frequência)</p>
-
-            <p>Média do aluno no curso:</p>
-            <p class="mediaAluno">(média)</p>
-        </section>
+            </section>
     </main>
+    
+    <script src="scriptTelaInicialAluno.js"></script>
 </body>
 
 </html>

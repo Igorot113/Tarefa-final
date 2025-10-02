@@ -12,131 +12,92 @@
     <header>
         <div>
             <p>Professor:</p>
-            <p class="NomeProfessor">(nome do professor)</p>
+            <p class="NomeProfessor">Carregando...</p>
         </div>
         <div>
-            <button>Adicionar Aluno</button>
+            <a href="RegistrarAluno.html">
+                <button id="btnAddAluno">Adicionar Novo Aluno</button>
+            </a>
+            <button id="btnLogout">Sair</button>
         </div>
     </header>
 
     <main>
-        <!-- Tabela de Alunos -->
         <section class="tabelaAlunos card">
-            <h3>Alunos</h3>
+            <h3>Alunos Cadastrados</h3>
             <table>
-                <tr>
-                    <th>Nome</th>
-                    <th>Média</th>
-                    <th>Frequência</th>
-                </tr>
-                <tr>
-                    <td>(aluno 1)</td>
-                    <td>(media 1)</td>
-                    <td>(frequência 1)</td>
-                </tr>
-                <tr>
-                    <td>(aluno 2)</td>
-                    <td>(media 2)</td>
-                    <td>(frequência 2)</td>
-                </tr>
-                <tr>
-                    <td>(aluno 3)</td>
-                    <td>(media 3)</td>
-                    <td>(frequência 3)</td>
-                </tr>
-                <tr>
-                    <td>(aluno 4)</td>
-                    <td>(media 4)</td>
-                    <td>(frequência 4)</td>
-                </tr>
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>CPF</th>
+                        <th>Status</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody id="tabelaAlunosBody">
+                    </tbody>
             </table>
         </section>
 
-        <!-- Tarefas Pendentes -->
-        <section class="listaTarefas card">
-            <h3>Tarefas Pendentes</h3>
-            <ul>
-                <li>(tarefa 1)</li>
-                <li>(tarefa 2)</li>
-                <li>(tarefa 3)</li>
-                <li>(tarefa 4)</li>
-                <li>(tarefa 5)</li>
-            </ul>
+        <section class="gerenciarAluno card">
+            <h3>Gerenciar Aluno (Status/Aulas)</h3>
+            <form id="formGerenciarAluno">
+                <label for="inputCpfGerenciar">CPF do Aluno:</label>
+                <input type="text" id="inputCpfGerenciar" placeholder="Apenas números" required>
+                
+                <br>
+                <label for="selectStatus">Status de Aprovação:</label>
+                <select id="selectStatus" required>
+                    <option value="">Selecione...</option>
+                    <option value="Aprovado">Aprovado</option>
+                    <option value="Reprovado">Reprovado</option>
+                    <option value="Pendente">Pendente</option>
+                </select>
+                <button type="button" id="btnSetStatus">Atualizar Status</button>
+
+                <br>
+                <label for="selectDia">Dia da Semana:</label>
+                <select id="selectDia" required>
+                    <option value="">Selecione...</option>
+                    <option value="Segunda-feira">Segunda-feira</option>
+                    <option value="Terça-feira">Terça-feira</option>
+                    <option value="Quarta-feira">Quarta-feira</option>
+                    <option value="Quinta-feira">Quinta-feira</option>
+                    <option value="Sexta-feira">Sexta-feira</option>
+                </select>
+                <label for="inputMateria">Matéria:</label>
+                <input type="text" id="inputMateria" placeholder="Nome da matéria">
+                <button type="button" id="btnAtribuirAula">Atribuir Aula</button>
+            </form>
         </section>
 
-        <!-- Atribuir Tarefa -->
         <section class="atribuirTarefa card">
-            <h3>Atribuir Tarefa a Aluno</h3>
-            <label for="cpfTarefa">Digite o CPF do aluno:</label>
-            <input type="text" name="cpf" id="cpfTarefa" placeholder="CPF do aluno">
-
-            <label for="tarefa">Nome da Tarefa:</label>
-            <input type="text" name="tarefa" id="tarefa" placeholder="Nome da tarefa">
-
-            <button>Atribuir</button>
+            <h3>Atribuir Nova Tarefa</h3>
+            <form id="formAtribuirTarefa">
+                <label for="cpfTarefa">CPF do Aluno:</label>
+                <input type="text" id="cpfTarefa" placeholder="CPF do aluno" required>
+                <br>
+                <label for="nomeTarefa">Nome da Tarefa:</label>
+                <input type="text" id="nomeTarefa" placeholder="Ex: Fazer resumo de Biologia" required>
+                <br>
+                <button type="submit">Atribuir Tarefa</button>
+            </form>
         </section>
 
-        <!-- Calendário -->
+        <section class="listaTarefas card">
+            <h3>Tarefas Pendentes (Geral)</h3>
+            <ul id="listaTarefasUL">
+                </ul>
+        </section>
+
         <section class="calendario card">
-            <h3>Aulas Atribuídas no Mês de Outubro</h3>
-            <table>
-                <tr>
-                    <th class="weekend">Dom</th>
-                    <th>Seg</th>
-                    <th>Ter</th>
-                    <th>Qua</th>
-                    <th>Qui</th>
-                    <th>Sex</th>
-                    <th class="weekend">Sáb</th>
-                </tr>
-                <tr>
-                    <td class="weekend"></td>
-                    <td>1</td>
-                    <td>2</td>
-                    <td>3</td>
-                    <td>4</td>
-                    <td>5</td>
-                    <td class="weekend">6</td>
-                </tr>
-                <tr>
-                    <td class="weekend">7</td>
-                    <td>8</td>
-                    <td>9</td>
-                    <td>10</td>
-                    <td>11</td>
-                    <td>12</td>
-                    <td class="weekend">13</td>
-                </tr>
-                <tr>
-                    <td class="weekend">14</td>
-                    <td>15</td>
-                    <td>16</td>
-                    <td>17</td>
-                    <td>18</td>
-                    <td>19</td>
-                    <td class="weekend">20</td>
-                </tr>
-                <tr>
-                    <td class="weekend">21</td>
-                    <td>22</td>
-                    <td>23</td>
-                    <td>24</td>
-                    <td>25</td>
-                    <td>26</td>
-                    <td class="weekend">27</td>
-                </tr>
-                <tr>
-                    <td class="weekend">28</td>
-                    <td>29</td>
-                    <td>30</td>
-                    <td>31</td>
-                    <td></td>
-                    <td></td>
-                    <td class="weekend"></td>
-                </tr>
-            </table>
+            <h3>Aulas Atribuídas (Resumo)</h3>
+            <div id="resumoAulas">
+                <p>Use a seção "Gerenciar Aluno" para atribuir aulas.</p>
+            </div>
         </section>
     </main>
+    <script src="scriptTelaInicialProfessor.js"></script>
 </body>
 
 </html>
