@@ -1,8 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // --- Variáveis de DOM ---
+    // --- Variáveis de DOM (mantidas) ---
     const elementoNomeProfessor = document.querySelector('.NomeProfessor');
     const btnLogout = document.getElementById('btnLogout');
-    const btnAddAluno = document.getElementById('btnAddAluno');
     const tabelaAlunosBody = document.getElementById('tabelaAlunosBody');
     const listaTarefasUL = document.getElementById('listaTarefasUL');
     const resumoAulasDiv = document.getElementById('resumoAulas');
@@ -20,6 +19,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const inputCpfTarefa = document.getElementById('cpfTarefa');
     const inputNomeTarefa = document.getElementById('nomeTarefa');
 
+    // --- FUNÇÃO DE HASH SHA-256 (ASSÍNCRONA) ---
+    async function hashSHA256(string) {
+        if (!string) return '';
+        const msgUint8 = new TextEncoder().encode(string);
+        const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);
+        const hashArray = Array.from(new Uint8Array(hashBuffer));
+        const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+        return hashHex;
+    }
+    // ----------------------------------------------------
 
     // --- Funções de Ajuda para LocalStorage ---
     function getAlunos() {
@@ -30,9 +39,13 @@ document.addEventListener('DOMContentLoaded', () => {
         localStorage.setItem('alunos', JSON.stringify(alunos));
     }
 
-    function findAlunoIndexByCpf(cpf) {
+    // ATENÇÃO: AGORA É UMA FUNÇÃO ASSÍNCRONA E PROCURA POR 'cpfHash'
+    async function findAlunoIndexByCpf(cpf) {
+        if (!cpf) return -1;
         const alunos = getAlunos();
-        return alunos.findIndex(aluno => aluno.cpf === cpf);
+        const cpfHasheado = await hashSHA256(cpf); // Hashea o CPF digitado
+        // Busca pelo campo 'cpfHash'
+        return alunos.findIndex(aluno => aluno.cpfHash === cpfHasheado); 
     }
 
 
@@ -40,6 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- 1. VERIFICAÇÃO DE SESSÃO E INICIALIZAÇÃO ---
     // --------------------------------------------------------------------------------
 
+    // A função inicializarTela pode continuar síncrona, mas pode chamar uma função assíncrona
     function inicializarTela() {
         const usuarioLogadoJSON = sessionStorage.getItem('usuarioLogado');
         
@@ -58,53 +72,24 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
         
-        // Exibe o nome do professor
         elementoNomeProfessor.textContent = professor.nome;
 
         carregarDados();
     }
     
     // --------------------------------------------------------------------------------
-    // --- 2. LÓGICA DE EVENTOS E FUNCIONALIDADES ---
+    // --- 2. LÓGICA DE EVENTOS E FUNCIONALIDADES (AGORA ASSÍNCRONA) ---
     // --------------------------------------------------------------------------------
 
-    // Evento de Logout
+    // Evento de Logout (mantido síncrono)
     btnLogout.addEventListener('click', () => {
         sessionStorage.removeItem('usuarioLogado');
         alert('Sessão encerrada.');
         window.location.href = 'login.html';
     });
-    /*
-    // Evento Adicionar Aluno (simples, usando prompt)
-    btnAddAluno.addEventListener('click', () => {
-        const nome = prompt("Digite o NOME do novo aluno:");
-        const cpf = prompt("Digite o CPF do novo aluno (apenas números):");
 
-        if (nome && cpf) {
-            let alunos = getAlunos();
-            if (findAlunoIndexByCpf(cpf) !== -1) {
-                alert("Erro: Já existe um aluno cadastrado com este CPF.");
-                return;
-            }
-
-            const novoAluno = {
-                nome: nome.trim(),
-                cpf: cpf.trim(),
-                tipo: 'aluno', 
-                statusAprovacao: 'Pendente',
-                aulasAtribuidas: {}, 
-                tarefasPendentes: []
-            };
-
-            alunos.push(novoAluno);
-            saveAlunos(alunos);
-            alert(`Aluno ${nome} cadastrado com sucesso!`);
-            carregarDados(); // Atualiza a tela
-        }
-    });
-    */
-    // REQUISITO 5: Atribuir Tarefa
-    formAtribuirTarefa.addEventListener('submit', (e) => {
+    // REQUISITO 5: Atribuir Tarefa (AGORA ASYNC)
+    formAtribuirTarefa.addEventListener('submit', async (e) => {
         e.preventDefault();
         const cpf = inputCpfTarefa.value.trim();
         const nomeTarefa = inputNomeTarefa.value.trim();
@@ -112,7 +97,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!cpf || !nomeTarefa) return alert("Preencha todos os campos.");
 
         let alunos = getAlunos();
-        const alunoIndex = findAlunoIndexByCpf(cpf);
+        // ATENÇÃO: USA await
+        const alunoIndex = await findAlunoIndexByCpf(cpf); 
 
         if (alunoIndex === -1) return alert("Aluno com este CPF não encontrado.");
 
@@ -124,15 +110,16 @@ document.addEventListener('DOMContentLoaded', () => {
         carregarDados();
     });
 
-    // REQUISITO 4: Atualizar Status de Aprovação
-    btnSetStatus.addEventListener('click', () => {
+    // REQUISITO 4: Atualizar Status de Aprovação (AGORA ASYNC)
+    btnSetStatus.addEventListener('click', async () => {
         const cpf = inputCpfGerenciar.value.trim();
         const novoStatus = selectStatus.value;
 
         if (!cpf || !novoStatus) return alert("Preencha o CPF e selecione o Status.");
 
         let alunos = getAlunos();
-        const alunoIndex = findAlunoIndexByCpf(cpf);
+        // ATENÇÃO: USA await
+        const alunoIndex = await findAlunoIndexByCpf(cpf); 
 
         if (alunoIndex === -1) return alert("Aluno com este CPF não encontrado.");
 
@@ -145,8 +132,8 @@ document.addEventListener('DOMContentLoaded', () => {
         carregarDados();
     });
 
-    // REQUISITO 2: Atribuir Aula por Dia e Matéria
-    btnAtribuirAula.addEventListener('click', () => {
+    // REQUISITO 2: Atribuir Aula por Dia e Matéria (AGORA ASYNC)
+    btnAtribuirAula.addEventListener('click', async () => {
         const cpf = inputCpfGerenciar.value.trim();
         const dia = selectDia.value;
         const materia = inputMateria.value.trim();
@@ -154,7 +141,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!cpf || !dia || !materia) return alert("Preencha o CPF, Dia e Matéria.");
 
         let alunos = getAlunos();
-        const alunoIndex = findAlunoIndexByCpf(cpf);
+        // ATENÇÃO: USA await
+        const alunoIndex = await findAlunoIndexByCpf(cpf); 
 
         if (alunoIndex === -1) return alert("Aluno com este CPF não encontrado.");
 
@@ -171,7 +159,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // --------------------------------------------------------------------------------
-    // --- 3. CARREGAMENTO DINÂMICO DE DADOS ---
+    // --- 3. CARREGAMENTO DINÂMICO DE DADOS (Mantido Síncrono) ---
     // --------------------------------------------------------------------------------
     
     function carregarDados() {
@@ -191,21 +179,25 @@ document.addEventListener('DOMContentLoaded', () => {
         alunos.forEach(aluno => {
             const row = tabelaAlunosBody.insertRow();
             row.insertCell().textContent = aluno.nome;
-            row.insertCell().textContent = aluno.cpf;
+            // ATENÇÃO: Não exibe o CPF (hash) para o usuário final, apenas o nome.
+            // Se precisar de uma referência, você pode exibir uma versão parcial ou manter o campo invisível.
+            // Por segurança, NUNCA exiba o hash completo.
+            row.insertCell().textContent = aluno.cpfHash ? 'Hashed (Seguro)' : 'Erro: CPF não hasheado!'; 
             row.insertCell().textContent = aluno.statusAprovacao || 'Pendente'; 
             
-            // Célula de ações (Apenas informativo, as ações são feitas pelo formulário)
             const cellAcoes = row.insertCell();
             cellAcoes.textContent = "Ações acima";
         });
-
         
+        // ... (o restante da função carregarDados permanece o mesmo) ...
+
         // CARREGAR LISTA DE TAREFAS PENDENTES (Geral)
         let totalTarefas = 0;
         alunos.forEach(aluno => {
             aluno.tarefasPendentes.forEach(tarefa => {
                 const li = document.createElement('li');
-                li.textContent = `${aluno.nome} (${aluno.cpf}): ${tarefa}`;
+                // ATENÇÃO: Usando 'Hashed' ou outro identificador, se necessário.
+                li.textContent = `${aluno.nome}: ${tarefa}`; 
                 listaTarefasUL.appendChild(li);
                 totalTarefas++;
             });
@@ -223,7 +215,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const diasAtribuidos = Object.keys(aulas).length;
             
             if (diasAtribuidos > 0) {
-                aulasHtml += `<li><strong>${aluno.nome} (${aluno.cpf}):</strong>`;
+                aulasHtml += `<li><strong>${aluno.nome}:</strong>`; // Removendo o CPF
                 aulasHtml += '<ul>';
                 for (const dia in aulas) {
                     aulasHtml += `<li>${dia}: ${aulas[dia]}</li>`;

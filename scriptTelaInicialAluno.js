@@ -29,8 +29,16 @@ document.addEventListener('DOMContentLoaded', () => {
     // Garante que é um aluno e carrega o objeto completo do localStorage
     if (dadosSessao.tipo === 'aluno') {
         const alunos = getAlunos();
-        // Carrega o objeto mais atualizado do localStorage (importante para ver mudanças)
-        alunoLogado = alunos.find(a => a.cpf === dadosSessao.cpf);
+        
+        // CORREÇÃO CRUCIAL AQUI: 
+        // 1. Usamos o identificador de login (dadosSessao.cpf ou dadosSessao.cpfHash)
+        // 2. Comparamos com o campo SALVO no localStorage, que é 'cpfHash'.
+        // Assumindo que o login SALVA o hash no campo 'cpf' da sessão para simplicidade,
+        // mas compara com o campo 'cpfHash' no localStorage.
+        
+        const cpfIdentificador = dadosSessao.cpfHash || dadosSessao.cpf; // Pega o hash da sessão
+        
+        alunoLogado = alunos.find(a => a.cpfHash === cpfIdentificador); // BUSCA PELO cpfHash SALVO!
     }
 
     if (!alunoLogado) {
@@ -41,25 +49,24 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --------------------------------------------------------------------------------
-    // --- 2. INJEÇÃO DE DADOS NA TELA ---
+    // --- 2. INJEÇÃO DE DADOS NA TELA (O RESTO ESTAVA PERFEITO) ---
     // --------------------------------------------------------------------------------
-
+    
     // A. Nome do Aluno
     alunoNomeDisplay.textContent = alunoLogado.nome;
     
     // B. Status de Aprovação
     statusAprovacaoDisplay.textContent = alunoLogado.statusAprovacao || 'Pendente';
-    
-    // OBS: Frequência e Média não são gerenciadas pelo professor (N/A)
-    // Opcional: Adicionar classe para estilizar o status
     statusAprovacaoDisplay.classList.add(alunoLogado.statusAprovacao.toLowerCase());
 
 
     // C. Tarefas Pendentes
     function carregarTarefas() {
         listaTarefasUL.innerHTML = '';
-        const tarefas = alunoLogado.tarefasPendentes || [];
-
+        // O RESTANTE É PERFEITO, POIS USA SOMENTE AS PROPRIEDADES DO alunoLogado
+        const tarefas = alunoLogado.tarefasPendentes || []; 
+        // ... (restante da função carregarTarefas)
+        
         if (tarefas.length === 0) {
             listaTarefasUL.innerHTML = '<li>Nenhuma tarefa pendente. Bom trabalho!</li>';
             return;
@@ -75,6 +82,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // D. Aulas Atribuídas
     function carregarAulas() {
         listaAulasUL.innerHTML = '';
+        // O RESTANTE É PERFEITO, POIS USA SOMENTE AS PROPRIEDADES DO alunoLogado
         const aulas = alunoLogado.aulasAtribuidas || {};
         const diasSemana = ["Segunda-feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sexta-feira"];
 
@@ -101,15 +109,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 aulasEncontradas = true;
             }
         });
-        
-        if (!aulasEncontradas) {
-             // Caso não haja nenhuma aula atribuída, garante que a lista não fique vazia
-             // listaAulasUL.innerHTML = '<li>Nenhuma aula agendada pelo professor.</li>';
-        }
     }
     
     // --------------------------------------------------------------------------------
-    // --- 3. EVENTOS FINAIS ---
+    // --- 3. EVENTOS FINAIS (Mantidos) ---
     // --------------------------------------------------------------------------------
     
     btnLogout.addEventListener('click', () => {

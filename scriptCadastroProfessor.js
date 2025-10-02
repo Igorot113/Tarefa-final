@@ -4,28 +4,51 @@ document.addEventListener('DOMContentLoaded', () => {
     const inputCpf = document.getElementById('inputCpf');
     const inputSenha = document.getElementById('inputSenha');
 
-    form.addEventListener('submit', (event) => {
+    // --- FUNÇÃO DE HASH SHA-256 (ASSÍNCRONA) ---
+    /**
+     * Gera um hash SHA-256 de uma string.
+     * @param {string} string A string a ser hasheada.
+     * @returns {Promise<string>} O hash em formato hexadecimal.
+     */
+    async function hashSHA256(string) {
+        if (!string) return '';
+        const msgUint8 = new TextEncoder().encode(string); // encode como UTF-8
+        const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);
+        const hashArray = Array.from(new Uint8Array(hashBuffer));
+        const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+        return hashHex;
+    }
+    // ----------------------------------------------------
+
+    // --- Funções de Validação (Mantidas) ---
+    function validarNome(nome) {
+        const regexNome = /^[a-zA-ZáàâãéèêíïóôõöúüçÁÀÂÃÉÈÊÍÏÓÔÕÖÚÜÇ\s]+$/;
+        return regexNome.test(nome);
+    }
+
+    function validarSenha(senha) {
+        if (senha.length < 8) return false;
+        const regexEspecial = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
+        return regexEspecial.test(senha);
+    }
+    // --------------------------------------------------------------------------
+
+    // ATENÇÃO: O listener do evento 'submit' deve ser 'async' para usar 'await'
+    form.addEventListener('submit', async (event) => { 
         event.preventDefault();
 
         const nome = inputNome.value.trim();
         const cpf = inputCpf.value.trim();
-        const senha = inputSenha.value;
+        const senha = inputSenha.value; // Senha sem .trim() antes do hash
         const tipo = "professor";
 
-        // --- Funções de Validação (Corretas) ---
-        function validarNome(nome) {
-            const regexNome = /^[a-zA-ZáàâãéèêíïóôõöúüçÁÀÂÃÉÈÊÍÏÓÔÕÖÚÜÇ\s]+$/;
-            return regexNome.test(nome);
+        // 1. Validação de Campos Vazios
+        if (nome === '' || cpf === '' || senha === '') {
+            alert('Por favor, preencha todos os campos.');
+            return;
         }
 
-        function validarSenha(senha) {
-            if (senha.length < 8) return false;
-            const regexEspecial = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
-            return regexEspecial.test(senha);
-        }
-        // --------------------------------------------------------------------------
-
-        // --- Execução das Validações (Corretas) ---
+        // 2. Execução das Validações
         if (!validarNome(nome)) {
             alert('Erro no Nome: O nome deve conter apenas letras e espaços.');
             inputNome.focus();
@@ -37,33 +60,37 @@ document.addEventListener('DOMContentLoaded', () => {
             inputSenha.focus();
             return;
         }
-        // --------------------------------------------------------
+        
+        // --- NOVO: GERAÇÃO DO HASH (utilizando await) ---
+        const cpfHasheado = await hashSHA256(cpf);
+        const senhaHasheada = await hashSHA256(senha);
+        // --------------------------------------------------
 
 
-        // 1. RECUPERA a lista usando a chave 'professores'
+        // 3. RECUPERA a lista usando a chave 'professores'
         const listaProfessores = JSON.parse(localStorage.getItem('professores')) || [];
 
-        // 2. Verifica se o CPF já existe
-        const cpfExistente = listaProfessores.some(professor => professor.cpf === cpf);
+        // 4. Verifica se o CPF já existe (comparando os HASHES)
+        const cpfExistente = listaProfessores.some(professor => professor.cpfHash === cpfHasheado);
         if (cpfExistente) {
             alert('Erro: Já existe um professor cadastrado com este CPF.');
             inputCpf.focus();
             return;
         }
 
+        // 5. Cria o objeto do novo professor, salvando apenas os hashes
         const novoProfessor = {
             nome: nome,
-            cpf: cpf,
-            senha: senha,
+            cpfHash: cpfHasheado,   // O CPF original NÃO é salvo
+            senhaHash: senhaHasheada, // A Senha original NÃO é salva
             tipo: tipo
         };
 
-        // 3. Adiciona o novo professor à lista
+        // 6. Adiciona o novo professor à lista
         listaProfessores.push(novoProfessor);
 
-        // 4. SALVA a lista atualizada de volta na chave 'professores'
+        // 7. SALVA a lista atualizada
         try {
-            // ESTA LINHA CRIA/ATUALIZA A CHAVE 'professores'
             localStorage.setItem('professores', JSON.stringify(listaProfessores)); 
             
             alert('Cadastro de Professor realizado com sucesso! Você será redirecionado para a tela de Login.');

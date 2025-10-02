@@ -1,68 +1,24 @@
-/*document.addEventListener('DOMContentLoaded', () => {
-    const btnCadastro = document.getElementById('btnCadastroAluno');
-    const inputNome = document.getElementById('nome');
-    const inputCpf = document.getElementById('cpf');
-
-    // Funções de ajuda
-    function getAlunos() {
-        return JSON.parse(localStorage.getItem('alunos')) || [];
-    }
-
-    function saveAlunos(alunos) {
-        localStorage.setItem('alunos', JSON.stringify(alunos));
-    }
-
-    btnCadastro.addEventListener('click', () => {
-        const nome = inputNome.value.trim();
-        const cpf = inputCpf.value.trim();
-
-        // 1. Validação Simples
-        if (nome === '' || cpf === '') {
-            alert('Por favor, preencha o Nome e o CPF do aluno.');
-            return;
-        }
-
-        let alunos = getAlunos();
-
-        // 2. Verifica duplicidade de CPF
-        const cpfExistente = alunos.some(aluno => aluno.cpf === cpf);
-        if (cpfExistente) {
-            alert('Erro: Já existe um aluno cadastrado com este CPF.');
-            inputCpf.focus();
-            return;
-        }
-        
-        // 3. Cria o objeto do novo aluno
-        const novoAluno = {
-            nome: nome,
-            cpf: cpf,
-            // OBS: Não estamos adicionando senha aqui. O aluno precisará de um processo 
-            // de "primeiro acesso" para definir a senha se o login exigir.
-            tipo: 'aluno', 
-            statusAprovacao: 'Pendente',
-            aulasAtribuidas: {}, // Objeto vazio
-            tarefasPendentes: [] // Array vazio
-        };
-
-        // 4. Salva no LocalStorage
-        alunos.push(novoAluno);
-        saveAlunos(alunos);
-
-        alert(`Aluno ${nome} cadastrado com sucesso!`);
-        
-        // Opcional: Limpar formulário
-        inputNome.value = '';
-        inputCpf.value = '';
-
-        // Opcional: Redirecionar de volta para a tela inicial do professor
-        // window.location.href = 'telaInicialProfessor.html';
-    });
-});*/
 document.addEventListener('DOMContentLoaded', () => {
     const btnCadastro = document.getElementById('btnCadastroAluno');
     const inputNome = document.getElementById('nome');
     const inputCpf = document.getElementById('cpf');
 
+    // --- FUNÇÃO DE HASH SHA-256 (ASSÍNCRONA) ---
+    /**
+     * Gera um hash SHA-256 de uma string.
+     * @param {string} string A string a ser hasheada.
+     * @returns {Promise<string>} O hash em formato hexadecimal.
+     */
+    async function hashSHA256(string) {
+        if (!string) return '';
+        const msgUint8 = new TextEncoder().encode(string);
+        const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);
+        const hashArray = Array.from(new Uint8Array(hashBuffer));
+        const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+        return hashHex;
+    }
+    // ----------------------------------------------------
+
     // Funções de ajuda
     function getAlunos() {
         return JSON.parse(localStorage.getItem('alunos')) || [];
@@ -72,23 +28,13 @@ document.addEventListener('DOMContentLoaded', () => {
         localStorage.setItem('alunos', JSON.stringify(alunos));
     }
 
-    /**
-     * Valida se a string contém APENAS letras (maiúsculas/minúsculas) e espaços.
-     * Permite acentos e a maioria dos caracteres comuns em nomes.
-     * Retorna true se for VÁLIDO (não tem caracteres especiais não permitidos), false caso contrário.
-     */
     function validarNome(nome) {
-        // Regex: ^[a-zA-ZáàâãéèêíïóôõöúçñÁÀÂÃÉÈÊÍÏÓÔÕÖÚÇÑ\s]+$
-        // [a-zA-Z] - letras de A a Z (maiúsculas e minúsculas)
-        // [áàâã...ÇÑ] - letras acentuadas comuns em português e 'ñ'
-        // \s - espaço em branco
-        // + - um ou mais caracteres
-        // ^ $ - início e fim da string (garante que SÓ tenha esses caracteres)
         const regex = /^[a-zA-ZáàâãéèêíïóôõöúçñÁÀÂÃÉÈÊÍÏÓÔÕÖÚÇÑ\s]+$/;
         return regex.test(nome);
     }
 
-    btnCadastro.addEventListener('click', () => {
+    // ATENÇÃO: O listener AGORA é 'async'
+    btnCadastro.addEventListener('click', async () => { 
         const nome = inputNome.value.trim();
         const cpf = inputCpf.value.trim();
 
@@ -98,19 +44,22 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // --- INÍCIO DA NOVA VALIDAÇÃO ---
         // 1.1. Validação de Caracteres Especiais no Nome
         if (!validarNome(nome)) {
             alert('Erro: O nome não pode conter caracteres especiais ou números. Por favor, utilize apenas letras e espaços.');
             inputNome.focus();
             return;
         }
-        // --- FIM DA NOVA VALIDAÇÃO ---
+
+        // --- NOVO: GERAÇÃO DO HASH DO CPF ---
+        const cpfHasheado = await hashSHA256(cpf);
+        // ------------------------------------
 
         let alunos = getAlunos();
 
-        // 2. Verifica duplicidade de CPF
-        const cpfExistente = alunos.some(aluno => aluno.cpf === cpf);
+        // 2. Verifica duplicidade de CPF (AGORA usando o HASH)
+        // O campo no objeto salvo deve ser 'cpfHash'
+        const cpfExistente = alunos.some(aluno => aluno.cpfHash === cpfHasheado); 
         if (cpfExistente) {
             alert('Erro: Já existe um aluno cadastrado com este CPF.');
             inputCpf.focus();
@@ -120,13 +69,11 @@ document.addEventListener('DOMContentLoaded', () => {
         // 3. Cria o objeto do novo aluno
         const novoAluno = {
             nome: nome,
-            cpf: cpf,
-            // OBS: Não estamos adicionando senha aqui. O aluno precisará de um processo 
-            // de "primeiro acesso" para definir a senha se o login exigir.
+            cpfHash: cpfHasheado, // Salva o CPF HASHEADO, não o valor original
             tipo: 'aluno', 
             statusAprovacao: 'Pendente',
-            aulasAtribuidas: {}, // Objeto vazio
-            tarefasPendentes: [] // Array vazio
+            aulasAtribuidas: {},
+            tarefasPendentes: []
         };
 
         // 4. Salva no LocalStorage
@@ -138,8 +85,5 @@ document.addEventListener('DOMContentLoaded', () => {
         // Opcional: Limpar formulário
         inputNome.value = '';
         inputCpf.value = '';
-
-        // Opcional: Redirecionar de volta para a tela inicial do professor
-        // window.location.href = 'telaInicialProfessor.html';
     });
 });
