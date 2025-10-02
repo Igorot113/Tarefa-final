@@ -1,86 +1,71 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Pega o formulário de Login pelo ID
-    const formLogin = document.getElementById('formLogin');
+    const form = document.getElementById('formLogin');
+    const inputLogin = document.getElementById('inputLogin');
+    const inputSenha = document.getElementById('inputSenha');
 
-    if (!formLogin) {
-        console.error("Erro: O formulário de login não foi encontrado!");
-        return;
-    }
+    form.addEventListener('submit', (event) => {
+        event.preventDefault(); // Impede o envio padrão do formulário
 
-    formLogin.addEventListener('submit', (evento) => {
-        evento.preventDefault();
+        const login = inputLogin.value.trim();
+        const senha = inputSenha.value;
+        // Pega o valor do botão de rádio selecionado ('aluno' ou 'professor')
+        const tipoUsuarioSelecionado = document.querySelector('input[name="tipoUsuario"]:checked').value; 
 
-        // 1. Pega os valores dos campos
-        const login = document.getElementById('inputLogin').value.trim();
-        const senha = document.getElementById('inputSenha').value;
+        // 1. Determinar qual chave do localStorage usar
+        // Por enquanto, só temos 'professores' no localStorage.
+        // Se você já tiver implementado o cadastro de alunos com a chave 'alunos', descomente a linha.
+        const chaveLocalStorage = (tipoUsuarioSelecionado === 'professor') ? 'professores' : 'alunos';
 
-        // Pega o tipo de usuário selecionado (professor ou aluno)
-        const tipoUsuarioSelecionado = document.querySelector('input[name="tipoUsuario"]:checked').value;
+        // 2. Obter a lista de usuários da chave correta
+        // Se for 'alunos' e a chave não existir, a lista será vazia.
+        const listaUsuarios = JSON.parse(localStorage.getItem(chaveLocalStorage)) || [];
+        
+        let usuarioEncontrado = null;
 
-        // 2. Validação básica
-        if (login === "" || senha === "") {
-            alert("Por favor, preencha o Login e a Senha.");
-            return;
+        // 3. Buscar o usuário na lista pelo CPF (para professor)
+        if (tipoUsuarioSelecionado === 'professor') {
+            usuarioEncontrado = listaUsuarios.find(usuario => 
+                usuario.cpf === login && usuario.tipo === 'professor'
+            );
+        } else {
+            // Lógica para Aluno:
+            // Supondo que o aluno use o CPF ou Matrícula para login. 
+            // Como ainda não temos o campo "matrícula" no localstorage para alunos, 
+            // faremos a busca APENAS pelo login (que será o CPF, por enquanto).
+            usuarioEncontrado = listaUsuarios.find(usuario => 
+                (usuario.cpf === login /* || usuario.matricula === login */) && usuario.tipo === 'aluno'
+            );
         }
 
-        // 3. Verifica o Login
-        if (tipoUsuarioSelecionado === 'professor') {
-            logarProfessor(login, senha);
-        } else if (tipoUsuarioSelecionado === 'aluno') {
-            logarAluno(login, senha); // <--- Chamada para a nova função
+        // 4. Verificar se o usuário foi encontrado e se a senha está correta
+        if (usuarioEncontrado) {
+            // Em um sistema real, aqui você usaria um algoritmo de HASH para verificar a senha.
+            if (usuarioEncontrado.senha === senha) {
+                
+                alert(`Login bem-sucedido! Bem-vindo(a), ${usuarioEncontrado.nome}.`);
+                
+                // Opcional: Salvar o usuário logado para manter a sessão
+                sessionStorage.setItem('usuarioLogado', JSON.stringify(usuarioEncontrado));
+
+                // 5. Redirecionar para a tela inicial correta
+                if (usuarioEncontrado.tipo === 'professor') {
+                    // Mudar para o caminho real da tela do professor
+                    // window.location.href = 'telaProfessor.html';
+                    window.location.href = 'telaInicialProfessor.html';
+                } else if (usuarioEncontrado.tipo === 'aluno') {
+                    // Mudar para o caminho real da tela do aluno
+                    // window.location.href = 'telaAluno.html';
+                    window.location.href = 'telaInicialAluno.html';
+                    console.log("LOGADO: Redirecionando para tela do Aluno...");
+                }
+
+            } else {
+                alert('Senha incorreta. Tente novamente.');
+                inputSenha.focus();
+            }
+        } else {
+            alert('Usuário não encontrado ou o login (CPF/Matrícula) está incorreto para o tipo de conta selecionado.');
+            inputLogin.focus();
         }
     });
-
-    // Função específica para logar Professor
-    function logarProfessor(login, senha) {
-        const professoresJSON = localStorage.getItem('professores');
-        let professores = professoresJSON ? JSON.parse(professoresJSON) : [];
-
-        const professorEncontrado = professores.find(prof => 
-            prof.login === login && prof.senha === senha
-        );
-
-        if (professorEncontrado) {
-            const dadosSessao = {
-                login: professorEncontrado.login,
-                nome: professorEncontrado.nome,
-                tipo: 'professor',
-            };
-            
-            localStorage.setItem('usuarioLogado', JSON.stringify(dadosSessao));
-            alert(`Login de Professor bem-sucedido! Bem-vindo(a), ${professorEncontrado.nome}.`);
-            window.location.href = 'telaInicialProfessor.html'; 
-
-        } else {
-            alert("Login ou Senha de Professor inválidos.");
-        }
-    }
-
-    // Função específica para logar Aluno (NOVA)
-    function logarAluno(login, senha) {
-        // A chave 'alunosCadastrados' é onde salvamos os dados
-        const alunosJSON = localStorage.getItem('alunosCadastrados');
-        let alunos = alunosJSON ? JSON.parse(alunosJSON) : [];
-
-        // Busca o aluno que corresponde ao login (CPF) e Senha
-        const alunoEncontrado = alunos.find(aluno =>
-            // O login do aluno é o CPF que ele usou no cadastro
-            aluno.cpf === login && aluno.senha === senha 
-        );
-
-        if (alunoEncontrado) {
-            const dadosSessao = {
-                login: alunoEncontrado.cpf,
-                nome: alunoEncontrado.nome,
-                tipo: 'aluno',
-            };
-
-            localStorage.setItem('usuarioLogado', JSON.stringify(dadosSessao));
-            alert(`Login de Aluno bem-sucedido! Bem-vindo(a), ${alunoEncontrado.nome}.`);
-            window.location.href = 'telaInicialAluno.html'; // Redireciona para a página do aluno
-
-        } else {
-            alert("Login (CPF) ou Senha de Aluno inválidos.");
-        }
-    }
 });

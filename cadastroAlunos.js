@@ -1,33 +1,60 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const btnCadastroAluno = document.getElementById('btnCadastroAluno');
+    const btnCadastro = document.getElementById('btnCadastroAluno');
+    const inputNome = document.getElementById('nome');
+    const inputCpf = document.getElementById('cpf');
 
-    btnCadastroAluno.addEventListener('click', () => {
-        const nome = document.getElementById('nome').value;
-        const cpf = document.getElementById('cpf').value;
-        const senha = document.getElementById('senha').value;
+    // Funções de ajuda
+    function getAlunos() {
+        return JSON.parse(localStorage.getItem('alunos')) || [];
+    }
 
-        if (!nome || !cpf || !senha) {
-            alert('Por favor, preencha todos os campos para cadastrar o aluno.');
+    function saveAlunos(alunos) {
+        localStorage.setItem('alunos', JSON.stringify(alunos));
+    }
+
+    btnCadastro.addEventListener('click', () => {
+        const nome = inputNome.value.trim();
+        const cpf = inputCpf.value.trim();
+
+        // 1. Validação Simples
+        if (nome === '' || cpf === '') {
+            alert('Por favor, preencha o Nome e o CPF do aluno.');
             return;
         }
+
+        let alunos = getAlunos();
+
+        // 2. Verifica duplicidade de CPF
+        const cpfExistente = alunos.some(aluno => aluno.cpf === cpf);
+        if (cpfExistente) {
+            alert('Erro: Já existe um aluno cadastrado com este CPF.');
+            inputCpf.focus();
+            return;
+        }
+        
+        // 3. Cria o objeto do novo aluno
         const novoAluno = {
             nome: nome,
             cpf: cpf,
-            senha: senha
+            // OBS: Não estamos adicionando senha aqui. O aluno precisará de um processo 
+            // de "primeiro acesso" para definir a senha se o login exigir.
+            tipo: 'aluno', 
+            statusAprovacao: 'Pendente',
+            aulasAtribuidas: {}, // Objeto vazio
+            tarefasPendentes: [] // Array vazio
         };
 
-        const alunosExistentes = JSON.parse(localStorage.getItem('alunosCadastrados')) || [];
+        // 4. Salva no LocalStorage
+        alunos.push(novoAluno);
+        saveAlunos(alunos);
 
-        alunosExistentes.push(novoAluno);
+        alert(`Aluno ${nome} cadastrado com sucesso!`);
+        
+        // Opcional: Limpar formulário
+        inputNome.value = '';
+        inputCpf.value = '';
 
-        localStorage.setItem('alunosCadastrados', JSON.stringify(alunosExistentes));
-
-        alert(`Aluno(a) ${nome} cadastrado(a) com sucesso!`);
-
-        //Limpa os campos após o cadastro
-        document.getElementById('nome').value = '';
-        document.getElementById('cpf').value = '';
-        document.getElementById('senha').value = '';
-        console.log('Lista de alunos atualizada:', alunosExistentes);
+        // Opcional: Redirecionar de volta para a tela inicial do professor
+        // window.location.href = 'telaInicialProfessor.html';
     });
 });
